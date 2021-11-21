@@ -70,7 +70,7 @@ class Clicker:
         else:
             x1 = x
             y1 = y
-        print(x1,y1)
+        #print(x1,y1)
         win32api.SetCursorPos((x1,y1))
         time.sleep(0.05)
         for i in range(0,2): # click cnt
@@ -180,7 +180,7 @@ class Clicker:
 
     def startClickRoutine(self):
         player = Player.Player(1)
-        cd = ColorDetector.ColorDetector(player.playerColor)
+        cd = ColorDetector.ColorDetector(player.playerColor, False)
 
         t1 = time.time()
         t2 = time.time()
@@ -269,33 +269,53 @@ class Clicker:
             elif(self.isCtrlOn()):
                 [prevNumberClick1, isDetectNumberClick1] = self.detectNumberClickUp(prevNumberClick1, 0x31)
                 if(isDetectNumberClick1):
+                    player.setPlayerIndex(1)
+                    cd.setPlayerColor(player.playerColor, False)
                     print("1")
                 [prevNumberClick2, isDetectNumberClick2] = self.detectNumberClickUp(prevNumberClick2, 0x32)
                 if(isDetectNumberClick2):
+                    player.setPlayerIndex(2)
+                    cd.setPlayerColor(player.playerColor, False)
                     print("2")
                 [prevNumberClick3, isDetectNumberClick3] = self.detectNumberClickUp(prevNumberClick3, 0x33)
                 if(isDetectNumberClick3):
+                    player.setPlayerIndex(3)
+                    cd.setPlayerColor(player.playerColor, False)
                     print("3")
                 [prevNumberClick4, isDetectNumberClick4] = self.detectNumberClickUp(prevNumberClick4, 0x34)
                 if(isDetectNumberClick4):
+                    player.setPlayerIndex(4)
+                    cd.setPlayerColor(player.playerColor, False)
                     print("4")
                 [prevNumberClick5, isDetectNumberClick5] = self.detectNumberClickUp(prevNumberClick5, 0x35)
                 if(isDetectNumberClick5):
+                    player.setPlayerIndex(5)
+                    cd.setPlayerColor(player.playerColor, False)
                     print("5")
                 [prevNumberClick6, isDetectNumberClick6] = self.detectNumberClickUp(prevNumberClick6, 0x36)
                 if(isDetectNumberClick6):
+                    player.setPlayerIndex(6)
+                    cd.setPlayerColor(player.playerColor, False)
                     print("6")
                 [prevNumberClick7, isDetectNumberClick7] = self.detectNumberClickUp(prevNumberClick7, 0x37)
                 if(isDetectNumberClick7):
+                    player.setPlayerIndex(7)
+                    cd.setPlayerColor(player.playerColor, True)
                     print("7")
                 [prevNumberClick8, isDetectNumberClick8] = self.detectNumberClickUp(prevNumberClick8, 0x38)
                 if(isDetectNumberClick8):
+                    player.setPlayerIndex(8)
+                    cd.setPlayerColor(player.playerColor, False)
                     print("8")
                 [prevNumberClick9, isDetectNumberClick9] = self.detectNumberClickUp(prevNumberClick9, 0x39)
                 if(isDetectNumberClick9):
+                    player.setPlayerIndex(9)
+                    cd.setPlayerColor(player.playerColor, False)
                     print("9")
                 [prevNumberClick10, isDetectNumberClick10] = self.detectNumberClickUp(prevNumberClick10, 0x30)
                 if(isDetectNumberClick10):
+                    player.setPlayerIndex(10)
+                    cd.setPlayerColor(player.playerColor, False)
                     print("10")
 
             else:
@@ -319,4 +339,5 @@ class Clicker:
             if(isDetectCapsOff):
                 isDetectCapsOff = False
                 win32api.keybd_event(VK_MENU, 0, win32con.KEYEVENTF_KEYUP, 0)
+                isInitialised = False
                 print("Off")

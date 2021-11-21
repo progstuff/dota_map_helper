@@ -24,4 +24,3 @@ clicker.readDataFromConfigFile()
 clicker.startClickRoutine()
 
 
-

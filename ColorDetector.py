@@ -13,24 +13,25 @@ from PIL import Image
 import colorsys
 import PIL.ImageGrab
 class ColorDetector:
-    def __init__(self,r_hls):
+    def __init__(self,r_hls, isAnother):
         self.width = 15
         self.height = 15
-        self.dh = 5
-        self.dl = 5
+        self.dh = 3
+        self.dl = 3
         self.ds = 20
 
         self.hs = [[0 for x in range(self.width)] for y in range(self.height)]
         self.ls = [[0 for x in range(self.width)] for y in range(self.height)]
         self.ss = [[0 for x in range(self.width)] for y in range(self.height)]
-        self.setPlayerColor(r_hls)
+        self.setPlayerColor(r_hls, isAnother)
 
 
-    def setPlayerColor(self, r_hls):
+    def setPlayerColor(self, r_hls, isAnother):
         self.etalon=[]
         self.etalon.append(r_hls[0])
         self.etalon.append(r_hls[1])
         self.etalon.append(r_hls[2]);
+        self.isAnother = isAnother
 
 ##        x = 20
 ##        y = 20
@@ -49,18 +50,26 @@ class ColorDetector:
 ##                        img.putpixel( (i*x + k1, j*y + k2), (int(a[0]),int(a[1]),int(a[2])) )
 ##        img.save('tst.png')
 
-        print("set player color")
+        print("set new player color")
 
     def isPlayerInArea(self,i1,i2,j1,j2):
         n = self.width
         m = self.height
         cnt = 0
+
         for i in range(int(i1), int(i2)):
             for j in range(int(j1), int(j2)):
-                if(self.hs[i][j] > self.etalon[0] - self.dh and self.hs[i][j] < self.etalon[0] + self.dh):
-                    if(self.ls[i][j] > self.etalon[1] - self.dl and self.ls[i][j] < self.etalon[1] + self.dl):
-                        if(self.ss[i][j] > self.etalon[2] - 30):
-                            cnt = cnt + 1
+                if(self.isAnother):
+                    if(self.ls[i][j] < 140 and self.ss[i][j] < 30):
+                        cnt = cnt + 1
+                else:
+                    if(self.hs[i][j] > self.etalon[0] - self.dh and self.hs[i][j] < self.etalon[0] + self.dh):
+                        if(self.ls[i][j] > self.etalon[1] - self.dl and self.ls[i][j] < self.etalon[1] + self.dl):
+                            if(self.etalon[2] < 100):
+                                if(self.ss[i][j] > self.etalon[2] - 5):
+                                    cnt = cnt + 1
+                            elif(self.ss[i][j] > self.etalon[2] - 20):
+                                cnt = cnt + 1
         return cnt/((i2 - i1)*(j2 - j1))*100
 
     def checkSavedArea(self):

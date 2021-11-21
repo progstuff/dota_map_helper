@@ -38,3 +38,4 @@ class Player:
         self.playerColor.append(r[0]*240)
         self.playerColor.append(r[1]*240)
         self.playerColor.append(r[2]*240);
+        print("set player № ",playerIndex)

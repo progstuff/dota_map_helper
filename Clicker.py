@@ -18,6 +18,7 @@ import time
 from ctypes import windll
 import numpy
 import ColorDetector
+import Player
 class Clicker:
 
     def isCapsOn(self):
@@ -31,6 +32,16 @@ class Clicker:
 
     def isLeftClickUp(self):
         return win32api.GetKeyState(0x01) == 0 or win32api.GetKeyState(0x01) == 1
+
+    def isNumberClickUp(self,ind):
+        return win32api.GetKeyState(ind) == 0 or win32api.GetKeyState(ind) == 1
+
+    def detectNumberClickUp(self, prev, ind):
+        cur = self.isNumberClickUp(ind)
+        isDetect = False
+        if(cur != prev and cur == True):
+            isDetect = True
+        return [cur, isDetect]
 
     def detectCapsOn(self, prevCaps):
         curCaps = self.isCapsOn()
@@ -54,12 +65,8 @@ class Clicker:
         return [cur, isDetect]
 
     def click(self, x,y, needNoise):
-        #ctypes.windll.user32.SetCursorPos((x,y))
-
-
         if(needNoise):
             [x1,y1] = self.randomCoordsInArea(x, y, 15, 15)
-            #print("Noised")
         else:
             x1 = x
             y1 = y
@@ -73,12 +80,16 @@ class Clicker:
     def randomCoordsInArea(self, xRightUp, yLeftUp, xWidth, yWidth):
         if(xRightUp - xWidth < self.xLeftUp):
             x = round(numpy.random.uniform(self.xLeftUp,self.xLeftUp + xWidth,1)[0])
+        elif(xRightUp + xWidth > self.xLeftUp + self.xWidth):
+            x = round(numpy.random.uniform(self.xLeftUp + self.xWidth,self.xLeftUp + self.xWidth - xWidth,1)[0])
         else:
-            x = round(numpy.random.uniform(xRightUp - xWidth,xRightUp,1)[0])
+            x = round(numpy.random.uniform(xRightUp - xWidth,xRightUp + xWidth,1)[0])
         if(yLeftUp + yWidth > self.yLeftUp + self.yWidth):
             y = round(numpy.random.uniform(self.yLeftUp + self.yWidth - yWidth,self.yLeftUp + self.yWidth,1)[0])
+        elif(yLeftUp - yWidth < self.yLeftUp):
+            y = round(numpy.random.uniform(self.yLeftUp,self.yLeftUp + yWidth,1)[0])
         else:
-            y = round(numpy.random.uniform(yLeftUp,yLeftUp + yWidth,1)[0])
+            y = round(numpy.random.uniform(yLeftUp - yWidth,yLeftUp + yWidth,1)[0])
         return [x,y]
 
     def setArea(self, xLeftUp, yLeftUp, xWidth, yWidth):
@@ -168,7 +179,8 @@ class Clicker:
         return (red, green, blue)
 
     def startClickRoutine(self):
-        cd = ColorDetector.ColorDetector()
+        player = Player.Player(1)
+        cd = ColorDetector.ColorDetector(player.playerColor)
 
         t1 = time.time()
         t2 = time.time()
@@ -181,6 +193,27 @@ class Clicker:
 
         prevLeftClick = self.isLeftClickUp()
         isDetectLeftClick = False
+
+        prevNumberClick1 = self.isNumberClickUp(0x31)
+        isDetectNumberClick1 = False
+        prevNumberClick2 = self.isNumberClickUp(0x32)
+        isDetectNumberClick2 = False
+        prevNumberClick3 = self.isNumberClickUp(0x33)
+        isDetectNumberClick3 = False
+        prevNumberClick4 = self.isNumberClickUp(0x34)
+        isDetectNumberClick4 = False
+        prevNumberClick5 = self.isNumberClickUp(0x35)
+        isDetectNumberClick5 = False
+        prevNumberClick6 = self.isNumberClickUp(0x36)
+        isDetectNumberClick6 = False
+        prevNumberClick7 = self.isNumberClickUp(0x37)
+        isDetectNumberClick7 = False
+        prevNumberClick8 = self.isNumberClickUp(0x38)
+        isDetectNumberClick8 = False
+        prevNumberClick9 = self.isNumberClickUp(0x39)
+        isDetectNumberClick9 = False
+        prevNumberClick10 = self.isNumberClickUp(0x30)
+        isDetectNumberClick10 = False
 
         isFirstClick = False
         isSecondClick = False
@@ -232,6 +265,38 @@ class Clicker:
                         print("Second Click ", xSecond, ySecond)
                         self.setAreaByClicks(xFirst, yFirst, xSecond, ySecond)
                         self.saveDataToConfigFile()
+
+            elif(self.isCtrlOn()):
+                [prevNumberClick1, isDetectNumberClick1] = self.detectNumberClickUp(prevNumberClick1, 0x31)
+                if(isDetectNumberClick1):
+                    print("1")
+                [prevNumberClick2, isDetectNumberClick2] = self.detectNumberClickUp(prevNumberClick2, 0x32)
+                if(isDetectNumberClick2):
+                    print("2")
+                [prevNumberClick3, isDetectNumberClick3] = self.detectNumberClickUp(prevNumberClick3, 0x33)
+                if(isDetectNumberClick3):
+                    print("3")
+                [prevNumberClick4, isDetectNumberClick4] = self.detectNumberClickUp(prevNumberClick4, 0x34)
+                if(isDetectNumberClick4):
+                    print("4")
+                [prevNumberClick5, isDetectNumberClick5] = self.detectNumberClickUp(prevNumberClick5, 0x35)
+                if(isDetectNumberClick5):
+                    print("5")
+                [prevNumberClick6, isDetectNumberClick6] = self.detectNumberClickUp(prevNumberClick6, 0x36)
+                if(isDetectNumberClick6):
+                    print("6")
+                [prevNumberClick7, isDetectNumberClick7] = self.detectNumberClickUp(prevNumberClick7, 0x37)
+                if(isDetectNumberClick7):
+                    print("7")
+                [prevNumberClick8, isDetectNumberClick8] = self.detectNumberClickUp(prevNumberClick8, 0x38)
+                if(isDetectNumberClick8):
+                    print("8")
+                [prevNumberClick9, isDetectNumberClick9] = self.detectNumberClickUp(prevNumberClick9, 0x39)
+                if(isDetectNumberClick9):
+                    print("9")
+                [prevNumberClick10, isDetectNumberClick10] = self.detectNumberClickUp(prevNumberClick10, 0x30)
+                if(isDetectNumberClick10):
+                    print("10")
 
             else:
                 isFirstClick = False

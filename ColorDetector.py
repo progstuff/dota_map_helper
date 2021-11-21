@@ -13,44 +13,43 @@ from PIL import Image
 import colorsys
 import PIL.ImageGrab
 class ColorDetector:
-    def __init__(self):
+    def __init__(self,r_hls):
         self.width = 15
         self.height = 15
-        self.dh = 3
-        self.dl = 3
+        self.dh = 5
+        self.dl = 5
         self.ds = 20
 
         self.hs = [[0 for x in range(self.width)] for y in range(self.height)]
         self.ls = [[0 for x in range(self.width)] for y in range(self.height)]
         self.ss = [[0 for x in range(self.width)] for y in range(self.height)]
+        self.setPlayerColor(r_hls)
 
+
+    def setPlayerColor(self, r_hls):
         self.etalon=[]
+        self.etalon.append(r_hls[0])
+        self.etalon.append(r_hls[1])
+        self.etalon.append(r_hls[2]);
 
-        #r = colorsys.rgb_to_hls(90/255,12/255,126/255) # 3
-        #r = colorsys.rgb_to_hls(255/255,232/255,1/255) # 4
-        r = colorsys.rgb_to_hls(187/255,107/255,19/255) # 5
-        self.etalon.append(r[0]*240)
-        self.etalon.append(r[1]*240)
-        self.etalon.append(r[2]*240);
+##        x = 20
+##        y = 20
+##        w = x*self.dh*2
+##        h = y*self.dl*2
+##        img = Image.new('RGB', (w, h))
+##        for i in range(0,self.dh*2):
+##            for j in range(0,self.dl*2):
+##                for k1 in range(0, x):
+##                    for k2 in range(0,y):
+##                        a = []
+##                        r = colorsys.hls_to_rgb((self.etalon[0]-self.dh+i)/240,(self.etalon[1]-self.dl+j)/240,self.etalon[2]/240)
+##                        a.append(r[0]*255)
+##                        a.append(r[1]*255)
+##                        a.append(r[2]*255)
+##                        img.putpixel( (i*x + k1, j*y + k2), (int(a[0]),int(a[1]),int(a[2])) )
+##        img.save('tst.png')
 
-        x = 20
-        y = 20
-        w = x*self.dh*2
-        h = y*self.dl*2
-        img = Image.new('RGB', (w, h))
-        for i in range(0,self.dh*2):
-            for j in range(0,self.dl*2):
-                for k1 in range(0, x):
-                    for k2 in range(0,y):
-                        a = []
-                        r = colorsys.hls_to_rgb((self.etalon[0]-self.dh+i)/240,(self.etalon[1]-self.dl+j)/240,self.etalon[2]/240)
-                        a.append(r[0]*255)
-                        a.append(r[1]*255)
-                        a.append(r[2]*255)
-                        img.putpixel( (i*x + k1, j*y + k2), (int(a[0]),int(a[1]),int(a[2])) )
-        img.save('tst.png')
-        print("generated")
-
+        print("set player color")
 
     def isPlayerInArea(self,i1,i2,j1,j2):
         n = self.width
@@ -60,7 +59,7 @@ class ColorDetector:
             for j in range(int(j1), int(j2)):
                 if(self.hs[i][j] > self.etalon[0] - self.dh and self.hs[i][j] < self.etalon[0] + self.dh):
                     if(self.ls[i][j] > self.etalon[1] - self.dl and self.ls[i][j] < self.etalon[1] + self.dl):
-                        if(self.ss[i][j] > 170):
+                        if(self.ss[i][j] > self.etalon[2] - 30):
                             cnt = cnt + 1
         return cnt/((i2 - i1)*(j2 - j1))*100
 

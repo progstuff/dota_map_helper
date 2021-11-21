@@ -179,8 +179,6 @@ class Clicker:
         return (red, green, blue)
 
     def startClickRoutine(self):
-        player = Player.Player(1)
-        cd = ColorDetector.ColorDetector(player.playerColor, False)
 
         t1 = time.time()
         t2 = time.time()
@@ -225,6 +223,12 @@ class Clicker:
         ySecond = 0
         #[x,y] = self.randomCoordsInArea()
         isInitialised = False
+        players = []
+        for i in range(0, 10):
+            players.append(Player.Player(i+1))
+        cd = ColorDetector.ColorDetector(players[0].playerColor, players[0].isAnother())
+        choosedPlayersIndexes = []
+        cleared = False
         while(True):
             t2 = time.time()
             dt = t2 - t1
@@ -237,15 +241,20 @@ class Clicker:
             if(self.isCapsOn()):
                 if(dt > 0.5):
                     t1 = time.time()
-                    #[x,y] = self.randomCoordsInArea()
-                    pnts = cd.colorCheckRows(self.xLeftUp, self.yLeftUp, self.xWidth, self.yWidth)
-                    if(len(pnts) > 0):
-                        isInitialised = True
-                        x = int(pnts[0][0])
-                        y = int(pnts[0][1])
-                        print(x,y)
-                if(isInitialised):
-                    self.click(x,y,True)
+
+                    cd.getPicture()
+                    for i in range(0, len(choosedPlayersIndexes)):
+                        choosedIndex = choosedPlayersIndexes[i]-1
+                        cd.setPlayerColor(players[choosedIndex].playerColor, players[choosedIndex].isAnother())
+                        pnts = cd.colorCheckRows(self.xLeftUp, self.yLeftUp, self.xWidth, self.yWidth)
+                        if(len(pnts) > 0):
+                            x = int(pnts[0][0])
+                            y = int(pnts[0][1])
+                            players[choosedIndex].isInitialised = True
+                            players[choosedIndex].x = x
+                            players[choosedIndex].y = y
+                            print("Игрок № ",players[choosedIndex].playerIndex,":",x,y)
+                            self.click(x,y, False)
 
 
             ## запомнить область 2-х кликов при нажатии alt + ctrl
@@ -267,68 +276,80 @@ class Clicker:
                         self.saveDataToConfigFile()
 
             elif(self.isCtrlOn()):
+                if(not(cleared)):
+                    cleared = True
+                    choosedPlayersIndexes = []
+                printed = True
+
                 [prevNumberClick1, isDetectNumberClick1] = self.detectNumberClickUp(prevNumberClick1, 0x31)
                 if(isDetectNumberClick1):
-                    player.setPlayerIndex(1)
-                    cd.setPlayerColor(player.playerColor, False)
-                    print("1")
+                    choosedPlayersIndexes.append(1)
+                    printed = False
+
                 [prevNumberClick2, isDetectNumberClick2] = self.detectNumberClickUp(prevNumberClick2, 0x32)
                 if(isDetectNumberClick2):
-                    player.setPlayerIndex(2)
-                    cd.setPlayerColor(player.playerColor, False)
-                    print("2")
+                    choosedPlayersIndexes.append(2)
+                    printed = False
+
                 [prevNumberClick3, isDetectNumberClick3] = self.detectNumberClickUp(prevNumberClick3, 0x33)
                 if(isDetectNumberClick3):
-                    player.setPlayerIndex(3)
-                    cd.setPlayerColor(player.playerColor, False)
-                    print("3")
+                    choosedPlayersIndexes.append(3)
+                    printed = False
+
                 [prevNumberClick4, isDetectNumberClick4] = self.detectNumberClickUp(prevNumberClick4, 0x34)
                 if(isDetectNumberClick4):
-                    player.setPlayerIndex(4)
-                    cd.setPlayerColor(player.playerColor, False)
-                    print("4")
+                    choosedPlayersIndexes.append(4)
+                    printed = False
+
                 [prevNumberClick5, isDetectNumberClick5] = self.detectNumberClickUp(prevNumberClick5, 0x35)
                 if(isDetectNumberClick5):
-                    player.setPlayerIndex(5)
-                    cd.setPlayerColor(player.playerColor, False)
-                    print("5")
+                    choosedPlayersIndexes.append(5)
+                    printed = False
+
                 [prevNumberClick6, isDetectNumberClick6] = self.detectNumberClickUp(prevNumberClick6, 0x36)
                 if(isDetectNumberClick6):
-                    player.setPlayerIndex(6)
-                    cd.setPlayerColor(player.playerColor, False)
-                    print("6")
+                    choosedPlayersIndexes.append(6)
+                    printed = False
+
                 [prevNumberClick7, isDetectNumberClick7] = self.detectNumberClickUp(prevNumberClick7, 0x37)
                 if(isDetectNumberClick7):
-                    player.setPlayerIndex(7)
-                    cd.setPlayerColor(player.playerColor, True)
-                    print("7")
+                    choosedPlayersIndexes.append(7)
+                    printed = False
+
                 [prevNumberClick8, isDetectNumberClick8] = self.detectNumberClickUp(prevNumberClick8, 0x38)
                 if(isDetectNumberClick8):
-                    player.setPlayerIndex(8)
-                    cd.setPlayerColor(player.playerColor, False)
-                    print("8")
+                    choosedPlayersIndexes.append(8)
+                    printed = False
+
                 [prevNumberClick9, isDetectNumberClick9] = self.detectNumberClickUp(prevNumberClick9, 0x39)
                 if(isDetectNumberClick9):
-                    player.setPlayerIndex(9)
-                    cd.setPlayerColor(player.playerColor, False)
-                    print("9")
+                    choosedPlayersIndexes.append(9)
+                    printed = False
+
                 [prevNumberClick10, isDetectNumberClick10] = self.detectNumberClickUp(prevNumberClick10, 0x30)
                 if(isDetectNumberClick10):
-                    player.setPlayerIndex(10)
-                    cd.setPlayerColor(player.playerColor, False)
-                    print("10")
+                    choosedPlayersIndexes.append(10)
+                    printed = False
+
+                if(not(printed)):
+                    printed = True
+                    s = ""
+                    for i in range(0, len(choosedPlayersIndexes)):
+                        s = s + str(choosedPlayersIndexes[i]) + ";"
+                    print(s)
 
             else:
+                cleared = False
                 isFirstClick = False
                 isSecondClick = False
 
                 [prevLeftClick, isDetectLeftClick] = self.detectLeftClickUp(prevLeftClick)
-                if(isDetectLeftClick):
+                #if(isDetectLeftClick):
                     #[x, y] = self.getCursorPosition()
                     #color = win32gui.GetPixel(win32gui.GetDC(win32gui.GetActiveWindow()), x , y)
                     #print(self.rgbint2rgbtuple(color))
                     #print("click")
-                    cd.colorCheckRows(self.xLeftUp, self.yLeftUp, self.xWidth, self.yWidth)
+                    #cd.colorCheckRows(self.xLeftUp, self.yLeftUp, self.xWidth, self.yWidth)
 
             if(isDetectCapsOn):
                 isDetectCapsOn = False

@@ -17,8 +17,6 @@ if __name__ == '__main__':
     main()
 
 
-
-
 clicker = Clicker.Clicker()
 clicker.readDataFromConfigFile()
 clicker.startClickRoutine()

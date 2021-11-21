@@ -16,9 +16,9 @@ class ColorDetector:
     def __init__(self,r_hls, isAnother):
         self.width = 15
         self.height = 15
-        self.dh = 3
-        self.dl = 3
-        self.ds = 20
+        self.dh = 5
+        self.dl = 5
+        self.ds = 5
 
         self.hs = [[0 for x in range(self.width)] for y in range(self.height)]
         self.ls = [[0 for x in range(self.width)] for y in range(self.height)]
@@ -50,7 +50,7 @@ class ColorDetector:
 ##                        img.putpixel( (i*x + k1, j*y + k2), (int(a[0]),int(a[1]),int(a[2])) )
 ##        img.save('tst.png')
 
-        print("set new player color")
+        print("set new player color", r_hls[0], r_hls[1], r_hls[2])
 
     def isPlayerInArea(self,i1,i2,j1,j2):
         n = self.width
@@ -68,7 +68,7 @@ class ColorDetector:
                             if(self.etalon[2] < 100):
                                 if(self.ss[i][j] > self.etalon[2] - 5):
                                     cnt = cnt + 1
-                            elif(self.ss[i][j] > self.etalon[2] - 20):
+                            elif(self.ss[i][j] > self.etalon[2] - self.ds):
                                 cnt = cnt + 1
         return cnt/((i2 - i1)*(j2 - j1))*100
 
@@ -143,20 +143,18 @@ class ColorDetector:
         #if(yRectRightUp + self.height > yLeftUp + yWidth):
 
         #print("stop")
-
+    def getPicture(self):
+        self.img = PIL.ImageGrab.grab().load()
     def colorCheckRows(self, xLeftUp, yLeftUp, xWidth, yWidth):
-
-        img = PIL.ImageGrab.grab().load()
-        #PIL.ImageGrab.grab().save("test.png")
         yRectRightUp = yLeftUp
         points = []
         while(yRectRightUp < yLeftUp + yWidth - self.height):
-            points = self.colorCheckRow(img, xLeftUp, yRectRightUp, xWidth, yWidth, points)
+            points = self.colorCheckRow(self.img, xLeftUp, yRectRightUp, xWidth, yWidth, points)
             yRectRightUp = yRectRightUp + self.height
             #print(yRectRightUp)
         if(yRectRightUp + self.height > yLeftUp + yWidth):
             yRectRightUp = yLeftUp + yWidth - self.height
-            points = self.colorCheckRow(img, xLeftUp, yRectRightUp, xWidth, yWidth, points)
+            points = self.colorCheckRow(self.img, xLeftUp, yRectRightUp, xWidth, yWidth, points)
             #print(yRectRightUp)
         return points
         #print("stop")

@@ -12,6 +12,9 @@ import colorsys
 class Player:
     def __init__(self, playerIndex):
         self.setPlayerIndex(playerIndex)
+        self.x = 0
+        self.y = 0
+        self.isInitialised = False
 
     def setPlayerIndex(self,playerIndex):
         self.playerColor=[]
@@ -26,9 +29,9 @@ class Player:
         elif(playerIndex == 5):
             r = colorsys.rgb_to_hls(187/255,107/255,19/255) # 5
         elif(playerIndex == 6):
-            r = colorsys.rgb_to_hls(138/255,141/255,147/255) # 6
+            r = colorsys.rgb_to_hls(224/255,89/255,92/255) # 6
         elif(playerIndex == 7):
-            r = colorsys.rgb_to_hls(28/255,59/255,227/255) # 7
+            r = colorsys.rgb_to_hls(144/255,145/255,146/255) # 7
         elif(playerIndex == 8):
             r = colorsys.rgb_to_hls(128/255,188/255,229/255) # 8
         elif(playerIndex == 9):
@@ -37,5 +40,14 @@ class Player:
             r = colorsys.rgb_to_hls(73/255,37/255,12/255) # 10
         self.playerColor.append(r[0]*240)
         self.playerColor.append(r[1]*240)
-        self.playerColor.append(r[2]*240);
+        self.playerColor.append(r[2]*240)
+        self.playerIndex = playerIndex
         print("set player № ",playerIndex)
+
+
+
+    def isAnother(self):
+        if(self.playerIndex == 7):
+            return True
+        return False
+

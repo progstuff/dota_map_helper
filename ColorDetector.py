@@ -13,44 +13,22 @@ from PIL import Image
 import colorsys
 import PIL.ImageGrab
 class ColorDetector:
-    def __init__(self,r_hls, isAnother):
-        self.width = 15
-        self.height = 15
-        self.dh = 5
-        self.dl = 5
-        self.ds = 5
+    def __init__(self,player):
+        self.width = 10
+        self.height = 10
+        self.dr = 0.03
+        self.dg = 0.03
+        self.db = 0.03
+        self.rs = [[0 for x in range(self.width)] for y in range(self.height)]
+        self.gs = [[0 for x in range(self.width)] for y in range(self.height)]
+        self.bs = [[0 for x in range(self.width)] for y in range(self.height)]
+        self.setPlayer(player)
 
-        self.hs = [[0 for x in range(self.width)] for y in range(self.height)]
-        self.ls = [[0 for x in range(self.width)] for y in range(self.height)]
-        self.ss = [[0 for x in range(self.width)] for y in range(self.height)]
-        self.setPlayerColor(r_hls, isAnother)
 
+    def setPlayer(self, player):
+        self.player = player
 
-    def setPlayerColor(self, r_hls, isAnother):
-        self.etalon=[]
-        self.etalon.append(r_hls[0])
-        self.etalon.append(r_hls[1])
-        self.etalon.append(r_hls[2]);
-        self.isAnother = isAnother
-
-##        x = 20
-##        y = 20
-##        w = x*self.dh*2
-##        h = y*self.dl*2
-##        img = Image.new('RGB', (w, h))
-##        for i in range(0,self.dh*2):
-##            for j in range(0,self.dl*2):
-##                for k1 in range(0, x):
-##                    for k2 in range(0,y):
-##                        a = []
-##                        r = colorsys.hls_to_rgb((self.etalon[0]-self.dh+i)/240,(self.etalon[1]-self.dl+j)/240,self.etalon[2]/240)
-##                        a.append(r[0]*255)
-##                        a.append(r[1]*255)
-##                        a.append(r[2]*255)
-##                        img.putpixel( (i*x + k1, j*y + k2), (int(a[0]),int(a[1]),int(a[2])) )
-##        img.save('tst.png')
-
-        print("set new player color", r_hls[0], r_hls[1], r_hls[2])
+        #print("set new player color", r_rgb[0], r_rgb[1], r_rgb[2])
 
     def isPlayerInArea(self,i1,i2,j1,j2):
         n = self.width
@@ -59,17 +37,12 @@ class ColorDetector:
 
         for i in range(int(i1), int(i2)):
             for j in range(int(j1), int(j2)):
-                if(self.isAnother):
-                    if(self.ls[i][j] < 140 and self.ss[i][j] < 30):
-                        cnt = cnt + 1
-                else:
-                    if(self.hs[i][j] > self.etalon[0] - self.dh and self.hs[i][j] < self.etalon[0] + self.dh):
-                        if(self.ls[i][j] > self.etalon[1] - self.dl and self.ls[i][j] < self.etalon[1] + self.dl):
-                            if(self.etalon[2] < 100):
-                                if(self.ss[i][j] > self.etalon[2] - 5):
-                                    cnt = cnt + 1
-                            elif(self.ss[i][j] > self.etalon[2] - self.ds):
-                                cnt = cnt + 1
+                r = self.rs[i][j]
+                g = self.gs[i][j]
+                b = self.bs[i][j]
+                k = self.player.checkColor(r, g, b)
+                cnt = cnt + k
+
         return cnt/((i2 - i1)*(j2 - j1))*100
 
     def checkSavedArea(self):
@@ -84,7 +57,9 @@ class ColorDetector:
         r.append(self.isPlayerInArea(self.width/4, self.width/4 + self.width/2, 0, self.height/2))
         r.append(self.isPlayerInArea(self.width/4, self.width/4 + self.width/2, self.height/2, self.height))
         a = max(r)
-        if(a > 1):
+
+        if(a > 80):
+            print(a)
             return [True,a]
         return [False,a]
 
@@ -96,10 +71,9 @@ class ColorDetector:
                 #color = win32gui.GetPixel(win32gui.GetDC(win32gui.GetActiveWindow()), i , j)
                 color = img[i,j]
                 rcolor = color
-                a=[];r = colorsys.rgb_to_hls(rcolor[0]/255,rcolor[1]/255,rcolor[2]/255);a.append(r[0]*240);a.append(r[1]*240);a.append(r[2]*240);
-                self.hs[i - xMin][j - yMin] = a[0]
-                self.ls[i - xMin][j - yMin] = a[1]
-                self.ss[i - xMin][j - yMin] = a[2]
+                self.rs[i - xMin][j - yMin] = rcolor[0]
+                self.gs[i - xMin][j - yMin] = rcolor[1]
+                self.bs[i - xMin][j - yMin] = rcolor[2]
                 #print(i - xMin,j - yMin)
 
 

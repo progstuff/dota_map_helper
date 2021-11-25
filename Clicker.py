@@ -73,9 +73,9 @@ class Clicker:
         #print(x1,y1)
         win32api.SetCursorPos((x1,y1))
         time.sleep(0.05)
-        for i in range(0,2): # click cnt
-            win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x1,y1,0,0)
-            win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x1,y1,0,0)
+##        for i in range(0,2): # click cnt
+##            win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,x1,y1,0,0)
+##            win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,x1,y1,0,0)
 
     def randomCoordsInArea(self, xRightUp, yLeftUp, xWidth, yWidth):
         if(xRightUp - xWidth < self.xLeftUp):
@@ -226,26 +226,24 @@ class Clicker:
         players = []
         for i in range(0, 10):
             players.append(Player.Player(i+1))
-        cd = ColorDetector.ColorDetector(players[0].playerColor, players[0].isAnother())
+        cd = ColorDetector.ColorDetector(players[0])
         choosedPlayersIndexes = []
         cleared = False
         while(True):
             t2 = time.time()
             dt = t2 - t1
 
-
             [prevCaps1, isDetectCapsOn] = self.detectCapsOn(prevCaps1)
             [prevCaps2, isDetectCapsOff] = self.detectCapsOff(prevCaps2)
 
-
             if(self.isCapsOn()):
-                if(dt > 0.5):
+                if(dt > 0.3):
                     t1 = time.time()
 
                     cd.getPicture()
                     for i in range(0, len(choosedPlayersIndexes)):
                         choosedIndex = choosedPlayersIndexes[i]-1
-                        cd.setPlayerColor(players[choosedIndex].playerColor, players[choosedIndex].isAnother())
+                        cd.setPlayer(players[choosedIndex])
                         pnts = cd.colorCheckRows(self.xLeftUp, self.yLeftUp, self.xWidth, self.yWidth)
                         if(len(pnts) > 0):
                             x = int(pnts[0][0])
@@ -253,7 +251,7 @@ class Clicker:
                             players[choosedIndex].isInitialised = True
                             players[choosedIndex].x = x
                             players[choosedIndex].y = y
-                            print("Игрок № ",players[choosedIndex].playerIndex,":",x,y)
+                            print("Игрок № ",players[choosedIndex].playerIndex,":",x,y,time.time())
                             self.click(x,y, False)
 
 

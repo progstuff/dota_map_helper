@@ -19,35 +19,51 @@ class Player:
     def setPlayerIndex(self,playerIndex):
         self.playerColor=[]
         if(playerIndex == 1):
-            r = colorsys.rgb_to_hls(28/255,59/255,227/255) # 1
+            r = [28,59,227] # 1
         elif(playerIndex == 2):
-            r = colorsys.rgb_to_hls(34/255,224/255,181/255) # 2
+            r = [22,184,148] # 2
         elif(playerIndex == 3):
-            r = colorsys.rgb_to_hls(90/255,12/255,126/255) # 3
+            r = [81,0,124]
         elif(playerIndex == 4):
-            r = colorsys.rgb_to_hls(255/255,232/255,1/255) # 4
+            r = [255,251,1] # 4
         elif(playerIndex == 5):
-            r = colorsys.rgb_to_hls(187/255,107/255,19/255) # 5
+            r = [245,133,14] # 5
         elif(playerIndex == 6):
-            r = colorsys.rgb_to_hls(224/255,89/255,92/255) # 6
+            r = [224,89,170] # 6
         elif(playerIndex == 7):
-            r = colorsys.rgb_to_hls(144/255,145/255,146/255) # 7
+            r = [144,145,146] # 7
         elif(playerIndex == 8):
-            r = colorsys.rgb_to_hls(128/255,188/255,229/255) # 8
+            r = [128,188,229] # 8
         elif(playerIndex == 9):
-            r = colorsys.rgb_to_hls(25/255,100/255,75/255) # 9
+            r = [17,101,68] # 9
         elif(playerIndex == 10):
-            r = colorsys.rgb_to_hls(73/255,37/255,12/255) # 10
-        self.playerColor.append(r[0]*240)
-        self.playerColor.append(r[1]*240)
-        self.playerColor.append(r[2]*240)
+            r = [79,47,12] # 10
+        self.playerColor.append(r[0])
+        self.playerColor.append(r[1])
+        self.playerColor.append(r[2])
         self.playerIndex = playerIndex
         print("set player № ",playerIndex)
 
+    def checkColor(self, r,g,b):
+        cnt = 0
+        s = float(r) + float(g) + float(b)
+        if(s != 0):
+            rk = float(r)/s
+            gk = float(g)/s
+            bk = float(b)/s
 
+            s = float(self.playerColor[0]) + float(self.playerColor[1]) + float(self.playerColor[2])
+            re = float(self.playerColor[0])/s
+            ge = float(self.playerColor[1])/s
+            be = float(self.playerColor[2])/s
+            # написать функцию сравнения для каждого игрока
+            dr = 0.03
+            dg = 0.03
+            db = 0.03
+            if(rk > re - dr and rk < re + dr):
+                if(gk > ge - dg and gk < ge + dg):
+                    if(bk > be - db and bk < be + db):
+                        cnt = cnt + 1
 
-    def isAnother(self):
-        if(self.playerIndex == 7):
-            return True
-        return False
+        return cnt
 

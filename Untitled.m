@@ -1,4 +1,4 @@
-data = imread('t6.png');
+data = imread('t8.png');
 mapImage = data(771:996,25:309,:);
 %imshow(mapImage)
 
@@ -11,7 +11,8 @@ for i = 1:length(mapImage(:,1,1))
         data2(i,j,3) = k(3)/sum(k);
     end
 end
-k = [75,41,6];
+k = [0,65,250];
+
 etalon = data2(42,20,:);
 etalon(1,1,:) = k./sum(k);
 
@@ -25,9 +26,11 @@ for i = 1:length(mapImage(:,1,1))
         u1 = k > (etalon - 0.03);
         u2 = k < (etalon + 0.03);
         if(sum(u1) + sum(u2) == 6)
-            data3(i,j,1) = 255;
-            data3(i,j,2) = 0;
-            data3(i,j,3) = 0;
+            %if(sum(mapImage(i,j,:)) <= 150)
+                data3(i,j,1) = 255;
+                data3(i,j,2) = 0;
+                data3(i,j,3) = 0;
+            %end
         end
     end
 end

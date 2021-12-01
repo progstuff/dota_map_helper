@@ -14,8 +14,8 @@ import colorsys
 import PIL.ImageGrab
 class ColorDetector:
     def __init__(self,player):
-        self.width = 10
-        self.height = 10
+        self.width = 8
+        self.height = 8
         self.dr = 0.03
         self.dg = 0.03
         self.db = 0.03
@@ -58,7 +58,7 @@ class ColorDetector:
         r.append(self.isPlayerInArea(self.width/4, self.width/4 + self.width/2, self.height/2, self.height))
         a = max(r)
 
-        if(a > 80):
+        if(a > 60):
             print(a)
             return [True,a]
         return [False,a]

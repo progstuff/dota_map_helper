@@ -15,11 +15,20 @@ class Player:
         self.x = 0
         self.y = 0
         self.isInitialised = False
+        self.isOnMap = False
+
+    def detectStateChanged(self,newState):
+        if(newState != self.isOnMap):
+            if(newState == True):
+                print("Игрок ",self.playerIndex,"появился на карте")
+            else:
+                print("Игрок ",self.playerIndex,"пропал с карты")
+        self.isOnMap = newState
 
     def setPlayerIndex(self,playerIndex):
         self.playerColor=[]
         if(playerIndex == 1):
-            r = [28,59,227] # 1
+            r = [0,65,250] # 1
         elif(playerIndex == 2):
             r = [22,184,148] # 2
         elif(playerIndex == 3):
@@ -37,7 +46,7 @@ class Player:
         elif(playerIndex == 9):
             r = [17,101,68] # 9
         elif(playerIndex == 10):
-            r = [79,47,12] # 10
+            r = [78,42,4] # 10
         self.playerColor.append(r[0])
         self.playerColor.append(r[1])
         self.playerColor.append(r[2])
@@ -52,18 +61,92 @@ class Player:
             gk = float(g)/s
             bk = float(b)/s
 
-            s = float(self.playerColor[0]) + float(self.playerColor[1]) + float(self.playerColor[2])
-            re = float(self.playerColor[0])/s
-            ge = float(self.playerColor[1])/s
-            be = float(self.playerColor[2])/s
-            # написать функцию сравнения для каждого игрока
-            dr = 0.03
-            dg = 0.03
-            db = 0.03
-            if(rk > re - dr and rk < re + dr):
-                if(gk > ge - dg and gk < ge + dg):
-                    if(bk > be - db and bk < be + db):
-                        cnt = cnt + 1
+            s2 = float(self.playerColor[0]) + float(self.playerColor[1]) + float(self.playerColor[2])
+            re = float(self.playerColor[0])/s2
+            ge = float(self.playerColor[1])/s2
+            be = float(self.playerColor[2])/s2
 
+            if(self.playerIndex == 1):
+                dr = 0.03
+                dg = 0.03
+                db = 0.03
+                if(rk > re - dr and rk < re + dr):
+                    if(gk > ge - dg and gk < ge + dg):
+                        if(bk > be - db and bk < be + db):
+                            cnt = cnt + 1
+            elif(self.playerIndex == 2):
+                dr = 0.03
+                dg = 0.03
+                db = 0.03
+                if(rk > re - dr and rk < re + dr):
+                    if(gk > ge - dg and gk < ge + dg):
+                        if(bk > be - db and bk < be + db):
+                            cnt = cnt + 1
+            elif(self.playerIndex == 3):
+                dr = 0.03
+                dg = 0.03
+                db = 0.03
+                if(rk > re - dr and rk < re + dr):
+                    if(gk > ge - dg and gk < ge + dg):
+                        if(bk > be - db and bk < be + db):
+                            cnt = cnt + 1
+            elif(self.playerIndex == 4):
+                dr = 0.03
+                dg = 0.03
+                db = 0.03
+                if(rk > re - dr and rk < re + dr):
+                    if(gk > ge - dg and gk < ge + dg):
+                        if(bk > be - db and bk < be + db):
+                            cnt = cnt + 1
+            elif(self.playerIndex == 5):
+                dr = 0.03
+                dg = 0.03
+                db = 0.03
+                if(s > 250):
+                    if(rk > re - dr and rk < re + dr):
+                        if(gk > ge - dg and gk < ge + dg):
+                            if(bk > be - db and bk < be + db):
+                                cnt = cnt + 1
+            elif(self.playerIndex == 6):
+                dr = 0.03
+                dg = 0.03
+                db = 0.03
+                if(rk > re - dr and rk < re + dr):
+                    if(gk > ge - dg and gk < ge + dg):
+                        if(bk > be - db and bk < be + db):
+                            cnt = cnt + 1
+            elif(self.playerIndex == 7):
+                dr = 0.03
+                dg = 0.03
+                db = 0.03
+                if(rk > re - dr and rk < re + dr):
+                    if(gk > ge - dg and gk < ge + dg):
+                        if(bk > be - db and bk < be + db):
+                            cnt = cnt + 1
+            elif(self.playerIndex == 8):
+                dr = 0.03
+                dg = 0.03
+                db = 0.03
+                if(rk > re - dr and rk < re + dr):
+                    if(gk > ge - dg and gk < ge + dg):
+                        if(bk > be - db and bk < be + db):
+                            cnt = cnt + 1
+            elif(self.playerIndex == 9):
+                dr = 0.03
+                dg = 0.03
+                db = 0.03
+                if(rk > re - dr and rk < re + dr):
+                    if(gk > ge - dg and gk < ge + dg):
+                        if(bk > be - db and bk < be + db):
+                            cnt = cnt + 1
+            elif(self.playerIndex == 10):
+                dr = 0.01
+                dg = 0.01
+                db = 0.01
+                if(s <= 140):
+                    if(rk > re - dr and rk < re + dr):
+                        if(gk > ge - dg and gk < ge + dg):
+                            if(bk > be - db and bk < be + db):
+                                cnt = cnt + 1
         return cnt
 

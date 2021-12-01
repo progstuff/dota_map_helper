@@ -245,6 +245,7 @@ class Clicker:
                         choosedIndex = choosedPlayersIndexes[i]-1
                         cd.setPlayer(players[choosedIndex])
                         pnts = cd.colorCheckRows(self.xLeftUp, self.yLeftUp, self.xWidth, self.yWidth)
+                        isDetected = False
                         if(len(pnts) > 0):
                             x = int(pnts[0][0])
                             y = int(pnts[0][1])
@@ -252,7 +253,10 @@ class Clicker:
                             players[choosedIndex].x = x
                             players[choosedIndex].y = y
                             print("Игрок № ",players[choosedIndex].playerIndex,":",x,y,time.time())
+                            isDetected = True
                             self.click(x,y, False)
+                        players[choosedIndex].detectStateChanged(isDetected)
+
 
 
             ## запомнить область 2-х кликов при нажатии alt + ctrl

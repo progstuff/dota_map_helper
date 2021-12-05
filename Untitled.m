@@ -1,5 +1,5 @@
 data = imread('t8.png');
-mapImage = data(771:996,25:309,:);
+mapImage = data(780:(780+213),37:(37+257),:);
 %imshow(mapImage)
 
 data2 = double(mapImage);

@@ -59,7 +59,7 @@ class ColorDetector:
         a = max(r)
 
         if(a > 60):
-            print(a)
+            #print(a)
             return [True,a]
         return [False,a]
 

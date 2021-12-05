@@ -178,6 +178,25 @@ class Clicker:
         red =   (RGBint >> 16) & 255
         return (red, green, blue)
 
+    def iccupMessage(self, lineCode):
+        print("detected ", lineCode)
+        if(lineCode == 1):
+            win32api.keybd_event(0x70, 0,0,0)
+            time.sleep(.05)
+            win32api.keybd_event(0x70,0 ,win32con.KEYEVENTF_KEYUP ,0)
+
+        elif(lineCode == 2):
+            win32api.keybd_event(0x71, 0,0,0)
+            time.sleep(.05)
+            win32api.keybd_event(0x71,0 ,win32con.KEYEVENTF_KEYUP ,0)
+
+        elif(lineCode == 3):
+            win32api.keybd_event(0x72, 0,0,0)
+            time.sleep(.05)
+            win32api.keybd_event(0x72,0 ,win32con.KEYEVENTF_KEYUP ,0)
+
+
+
     def startClickRoutine(self):
 
         t1 = time.time()
@@ -252,12 +271,19 @@ class Clicker:
                             players[choosedIndex].isInitialised = True
                             players[choosedIndex].x = x
                             players[choosedIndex].y = y
-                            print("Игрок № ",players[choosedIndex].playerIndex,":",x,y,time.time())
+                            #print("Игрок № ",players[choosedIndex].playerIndex,":",x,y,time.time())
                             isDetected = True
-                            self.click(x,y, False)
+                            #self.click(x,y, False)
+                            players[choosedIndex].tm = time.time()
+                            players[choosedIndex].currentLine(self.xLeftUp, self.yLeftUp, self.xWidth, self.yWidth)
                         players[choosedIndex].detectStateChanged(isDetected)
-
-
+                    else:
+                        for i in range(0, len(choosedPlayersIndexes)):
+                            choosedIndex = choosedPlayersIndexes[i]-1
+                            if(players[choosedIndex].isNeedMessage == True):
+                                print("detected")
+                                self.iccupMessage(players[choosedIndex].lastLine)
+                                players[choosedIndex].isNeedMessage = False
 
             ## запомнить область 2-х кликов при нажатии alt + ctrl
             elif(self.isAltOn() and self.isCtrlOn()):
@@ -357,7 +383,7 @@ class Clicker:
                 isDetectCapsOn = False
                 print("Clicker on")
                 self.printClickArea()
-                win32api.keybd_event(VK_MENU, 0, 0, 0)
+                #win32api.keybd_event(VK_MENU, 0, 0, 0)
 
             if(isDetectCapsOff):
                 isDetectCapsOff = False

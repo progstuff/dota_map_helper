@@ -9,21 +9,70 @@
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
 import colorsys
+import time
 class Player:
     def __init__(self, playerIndex):
         self.setPlayerIndex(playerIndex)
         self.x = 0
         self.y = 0
+        self.tm = 0
+        self.prevTm = 0
         self.isInitialised = False
         self.isOnMap = False
+        self.line = 0
+        self.prevLine = 0
+        self.prevState = True
+        self.lastState = 0
+        self.isNeedMessage = False
 
     def detectStateChanged(self,newState):
+        #if(time.time() - self.tm > 2):
         if(newState != self.isOnMap):
             if(newState == True):
-                print("Игрок ",self.playerIndex,"появился на карте")
+                self.prevState = False
+                print("пришёл")
+                self.prevLine = self.line
             else:
-                print("Игрок ",self.playerIndex,"пропал с карты")
-        self.isOnMap = newState
+                self.prevState = True
+                self.prevTm = time.time()
+                print("ушёл")
+            self.isOnMap = newState
+
+        if(time.time() - self.prevTm > 2):
+            if(self.prevState == True and self.isOnMap == False):
+                isNeedMessage = True
+                self.lastLine = self.prevLine
+                self.prevState = False
+                self.isNeedMessage = True
+                print("need mes ", self.lastLine)
+
+    def lineName(self):
+        if(self.line == 1):
+            return "верхняя линия"
+        if(self.line == 2):
+            return "средняя линия"
+        if(self.line == 3):
+            return "нижняя линия"
+        if(self.line == 0):
+            return "карты"
+
+    def currentLine(self, xLeftUp ,yLeftUp, xWidth, yWidth):
+        if(self.isOnMap):
+            if(self.x < xLeftUp + 70 and self.y < yLeftUp + 100):
+                #print("верхняя линия", self.playerIndex)
+                self.line = 1
+            elif(self.x > xLeftUp + xWidth - 75 and self.y > yLeftUp + yWidth - 90):
+                #print("нижняя линия ", self.playerIndex)
+                self.line = 3
+            else:
+                xc = xLeftUp + xWidth/2
+                yc = yLeftUp + yWidth/2
+                if(self.x > xc - 50 and self.x < xc + 50 and self.y > yc - 35 and self.y < yc + 35):
+                    #print("средняя линия", self.playerIndex)
+                    self.line = 2
+                else:
+                    #print("не определено", self.playerIndex)
+                    self.line = 0
 
     def setPlayerIndex(self,playerIndex):
         self.playerColor=[]
